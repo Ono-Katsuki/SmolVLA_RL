@@ -78,12 +78,17 @@ lets you check it.
 
 ### eval A (7 trained tasks, 105 episodes per method) — confounded, not the headline
 
-| Method | Success rate (task-bootstrap 95% CI) | vs SFT: paired difference (task-clustered CI) | McNemar p |
-|---|---|---|---|
-| SFT (baseline) | 28.6% [15.2, 41.9] | — | — |
-| RS-SFT | 42.9% [24.8, 61.9] | +15 [+2.9, +28.6] pp | 0.003 |
-| flow-DPO | 35.2% [22.9, 48.6] | +7 [−3.8, +16.2] pp | 0.230 |
-| GRPO (ours) | 31.4% [17.1, 44.8] | +3 [−1.9, +7.6] pp | 0.648 |
+| Method | Success rate (task-bootstrap 95% CI) | Net paired wins vs SFT (episodes) | Mean per-task difference vs SFT, pp (task-clustered CI) | McNemar p |
+|---|---|---|---|---|
+| SFT (baseline) | 28.6% [15.2, 41.9] | — | — | — |
+| RS-SFT | 42.9% [24.8, 61.9] | +15 | +14.3 [+2.9, +28.6] | 0.003 |
+| flow-DPO | 35.2% [22.9, 48.6] | +7 | +6.7 [−3.8, +16.2] | 0.230 |
+| GRPO (ours) | 31.4% [17.1, 44.8] | +3 | +2.9 [−1.9, +7.6] | 0.648 |
+
+Column 3 is a **count of episodes** (method-wins minus SFT-wins); column 4 is in
+**percentage points**. They are the same contrast in different units: over the 105
+paired episodes (7 tasks x 15), +15 net episodes is +14.3 pp. These used to share one
+cell as `+15 [+2.9, +28.6] pp`, which made the count look like a percentage.
 
 **Do not read this table as a ranking of methods.** Auditing the benchmark while
 writing the paper surfaced two confounds:
