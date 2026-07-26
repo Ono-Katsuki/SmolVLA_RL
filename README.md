@@ -1,5 +1,8 @@
 # SmolVLA_RL — Low-Budget Post-Training of a Flow-Matching VLA
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21585106.svg)](https://doi.org/10.5281/zenodo.21585106)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An experimental repository that post-trains SmolVLA (LeRobot) on LIBERO-Plus with
 **Flow-SDE GRPO** and compares it against alternative methods consuming the same
 rollouts (RS-SFT / flow-DPO) under a **paired evaluation**. The entire pipeline
@@ -498,3 +501,22 @@ The code is **MIT** ([`LICENSE`](LICENSE)); MIT lets you relicense derivative wo
 as you need. See [`CITATION.cff`](CITATION.cff) for citation information (the arXiv
 id will be added after submission). The manuscript text is licensed separately from
 the code and is not distributed here.
+
+This repository is archived on Zenodo and has a citable DOI. **Cite the software and
+data artifact, not a paper** — the manuscript is a separate, unfinished deliverable.
+
+| | DOI |
+|---|---|
+| **All versions** (concept DOI — prefer this one) | [10.5281/zenodo.21585106](https://doi.org/10.5281/zenodo.21585106) |
+| **v1.0.0** (this release) | [10.5281/zenodo.21585107](https://doi.org/10.5281/zenodo.21585107) |
+
+```bibtex
+@software{ono_smolvla_rl_2026,
+  author  = {Ono, Katsuki},
+  title   = {SmolVLA\_RL: Low-Budget Flow-SDE GRPO Fine-Tuning of a Flow-Matching VLA},
+  year    = {2026},
+  version = {v1.0.0},
+  doi     = {10.5281/zenodo.21585106},
+  url     = {https://doi.org/10.5281/zenodo.21585106}
+}
+```

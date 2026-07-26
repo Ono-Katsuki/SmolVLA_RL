@@ -1,13 +1,23 @@
 cff-version: 1.2.0
-message: "If you use this code or the recovered per-episode perturbation labels, please cite the following."
+message: "If you use this code, the preregistration or the raw per-episode evaluation data, please cite the archived software record below."
+type: software
 title: "SmolVLA_RL: Low-Budget Flow-SDE GRPO Fine-Tuning of a Flow-Matching VLA"
 authors:
   - family-names: Ono
     given-names: Katsuki
 repository-code: "https://github.com/Ono-Katsuki/SmolVLA_RL"
+url: "https://doi.org/10.5281/zenodo.21585106"
 license: MIT
-version: "0.1.0"
-date-released: "2026-07-23"
+version: "1.0.0"
+date-released: "2026-07-26"
+doi: "10.5281/zenodo.21585106"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21585106"
+    description: "Concept DOI — resolves to the latest version. Prefer this one."
+  - type: doi
+    value: "10.5281/zenodo.21585107"
+    description: "Version DOI — release v1.0.0."
 keywords:
   - vision-language-action
   - reinforcement-learning
@@ -15,17 +25,22 @@ keywords:
   - GRPO
   - LIBERO
   - robot-learning
+  - preregistration
+  - null-result
 abstract: >-
   A single-GPU, single-suite proof of concept for online RL fine-tuning of the
   flow-matching VLA SmolVLA using a Flow-SDE GRPO objective on LIBERO-Plus. The
-  repository documents two silent gradient pathologies (element-count ratio
-  normalization and chunk-weighting bias), a staged privileged reward with a
-  diagnostic funnel, and a fully scripted Colab pipeline.
-preferred-citation:
-  type: article
-  title: "Low-Budget Online RL for a Flow-Matching VLA: A Flow-SDE GRPO Proof of Concept and the Diagnostics Behind It"
-  authors:
-    - family-names: Ono
-      given-names: Katsuki
-  year: 2026
-  notes: "Preprint; arXiv identifier to be added upon submission."
+  confirmatory result is a null: on a preregistered unseen-task evaluation, GRPO
+  scored 20/138 against 19/138 for the SFT checkpoint it was initialized from
+  (mean per-task difference +0.72 pp, 95% task-clustered bootstrap CI
+  [-5.07, +6.52] pp, exact McNemar p = 1.0), which is "not established" under the
+  decision rule fixed before the run. An earlier trained-task comparison is
+  biased in favour of the arms trained on the collected rollouts and is not
+  evidence of generalization. The repository documents two silent gradient
+  pathologies (element-count ratio normalization and chunk-weighting bias), a
+  staged privileged reward with a diagnostic funnel, a fully scripted Colab
+  pipeline, and ships the preregistration and its amendment, the raw per-episode
+  evaluation data with the scripts that recompute every reported number, and a
+  runnable reproduction of an upstream LIBERO-Plus initial-state selection bug
+  (huggingface/lerobot#4152). The manuscript is a separate, unfinished
+  deliverable and is not part of this archive.
