@@ -1,0 +1,1280 @@
+{
+  "suite": "libero_spatial",
+  "mode": "in_dist",
+  "success_rate": 0.1377,
+  "n_total": 138,
+  "n_success": 19,
+  "n_tasks": 48,
+  "ci95_episode": [
+    0.0899,
+    0.205
+  ],
+  "ci95_task": [
+    0.0725,
+    0.2174
+  ],
+  "per_task": [
+    {
+      "task_id": 2203,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20262928,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262929,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262930,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 2381,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20263106,
+          "init_state": 0,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20263107,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20263108,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 542,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261267,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261268,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261269,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1661,
+      "n": 0,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [],
+      "error": "could not broadcast input array from shape (1080,) into shape (388800,)"
+    },
+    {
+      "task_id": 281,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261006,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261007,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261008,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 16,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20260741,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260742,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260743,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1502,
+      "n": 3,
+      "k": 2,
+      "rate": 0.6667,
+      "episodes": [
+        {
+          "seed": 20262227,
+          "init_state": 0,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20262228,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262229,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 989,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261714,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261715,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261716,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1334,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262059,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262060,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262061,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 521,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261246,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261247,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261248,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 347,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261072,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261073,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261074,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 261,
+      "n": 3,
+      "k": 3,
+      "rate": 1.0,
+      "episodes": [
+        {
+          "seed": 20260986,
+          "init_state": 0,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260987,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260988,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 124,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20260849,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260850,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260851,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1020,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261745,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261746,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261747,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 128,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20260853,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260854,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260855,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2168,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262893,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262894,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262895,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1524,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262249,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262250,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262251,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 397,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261122,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261123,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261124,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1540,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20262265,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262266,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20262267,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1345,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262070,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262071,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262072,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 458,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261183,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261184,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261185,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1170,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261895,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261896,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261897,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 145,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20260870,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260871,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260872,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2291,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20263016,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20263017,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20263018,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 552,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261277,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261278,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261279,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1594,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262319,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262320,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262321,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2123,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262848,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262849,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262850,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1675,
+      "n": 0,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [],
+      "error": "`np.float_` was removed in the NumPy 2.0 release. Use `np.float64` instead."
+    },
+    {
+      "task_id": 1683,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262408,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262409,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262410,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 533,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261258,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261259,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261260,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1267,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261992,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261993,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261994,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1042,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261767,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261768,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261769,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2332,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20263057,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20263058,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20263059,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 4,
+      "n": 3,
+      "k": 3,
+      "rate": 1.0,
+      "episodes": [
+        {
+          "seed": 20260729,
+          "init_state": 0,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260730,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20260731,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 2267,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262992,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262993,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262994,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1255,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261980,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261981,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261982,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 581,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261306,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261307,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261308,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 11,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20260736,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260737,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260738,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 1249,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261974,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261975,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261976,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2144,
+      "n": 3,
+      "k": 2,
+      "rate": 0.6667,
+      "episodes": [
+        {
+          "seed": 20262869,
+          "init_state": 0,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20262870,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262871,
+          "init_state": 2,
+          "n_init": 50,
+          "success": true
+        }
+      ]
+    },
+    {
+      "task_id": 1696,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262421,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262422,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262423,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1231,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261956,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261957,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261958,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 2176,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20262901,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262902,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262903,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1416,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20262141,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262142,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20262143,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 601,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20261326,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261327,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261328,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 273,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20260998,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260999,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20261000,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 177,
+      "n": 3,
+      "k": 0,
+      "rate": 0.0,
+      "episodes": [
+        {
+          "seed": 20260902,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260903,
+          "init_state": 1,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20260904,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    },
+    {
+      "task_id": 1450,
+      "n": 3,
+      "k": 1,
+      "rate": 0.3333,
+      "episodes": [
+        {
+          "seed": 20262175,
+          "init_state": 0,
+          "n_init": 50,
+          "success": false
+        },
+        {
+          "seed": 20262176,
+          "init_state": 1,
+          "n_init": 50,
+          "success": true
+        },
+        {
+          "seed": 20262177,
+          "init_state": 2,
+          "n_init": 50,
+          "success": false
+        }
+      ]
+    }
+  ],
+  "task_ids": [
+    2203,
+    2381,
+    542,
+    1661,
+    281,
+    16,
+    1502,
+    989,
+    1334,
+    521,
+    347,
+    261,
+    124,
+    1020,
+    128,
+    2168,
+    1524,
+    397,
+    1540,
+    1345,
+    458,
+    1170,
+    145,
+    2291,
+    552,
+    1594,
+    2123,
+    1675,
+    1683,
+    533,
+    1267,
+    1042,
+    2332,
+    4,
+    2267,
+    1255,
+    581,
+    11,
+    1249,
+    2144,
+    1696,
+    1231,
+    2176,
+    1416,
+    601,
+    273,
+    177,
+    1450
+  ]
+}

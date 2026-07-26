@@ -1,0 +1,39 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.playwright-mcp/
+outputs/
+analysis/generated/
+wandb/
+splits/
+.env
+.DS_Store
+*.egg-info/
+
+# Temporary files the Colab browser-automation agent drops into the working tree
+# (screenshots / accessibility snapshots / cell-output dumps).
+# Legitimate figures under assets/ remain tracked.
+/*.png
+/*.jpg
+/*.yaml
+/cell*.md
+/snap*.md
+/*_output.md
+/*_check.md
+/*_search.md
+/*_p[0-9]*.md
+/grpo_final_*.md
+/recovery_*.md
+/oauth_page.md
+/consent_page.md
+/drive_dialog.md
+/restart_dialog.md
+
+# session scratch (Playwright/Colab snapshots, recovery notes) -- never publish
+/*.txt
+!/requirements.txt
+/*snap*.md
+/oauth*
+/recover*

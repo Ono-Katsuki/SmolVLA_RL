@@ -1,0 +1,60 @@
+# Rollout collection and training config for RS-SFT / DPO.
+# The 3-method comparison (GRPO / RS-SFT / DPO) shares the same collected data.
+#
+# Usage (after SFT completes):
+#   python -m src.post_train.collect      --config configs/post_train.yaml   # ~1h (8task×8ep×4round)
+#   python -m src.post_train.train_rs_sft --config configs/post_train.yaml   # ~30min
+#   python -m src.post_train.train_dpo    --config configs/post_train.yaml   # ~30min
+
+collect:
+  sft_checkpoint: /content/outputs/sft_base_heldout/checkpoints/last
+  output_dir: /content/rollout_data
+  model_type: smolvla
+  # The same 8 tasks as grpo_prod.yaml. Required so RS-SFT / DPO / GRPO are
+  # compared on "the same data, the same task distribution" (previously the old
+  # selection remained and 6/8 differed from GRPO, confounding method
+  # differences with task difficulty: caught by Codex). From src/select_grpo_tasks.py.
+  task_ids:
+    - libero_spatial:79
+    - libero_spatial:108
+    - libero_spatial:1477
+    - libero_spatial:1530
+    - libero_spatial:1817
+    - libero_spatial:1955
+    - libero_spatial:2126
+    - libero_spatial:2172
+  group_size: 8
+  rounds: 4              # 8 tasks × 8 eps × 4 = 256 episodes (~5MB/ep ≈ 1.3GB)
+  render_skip: false     # disabled because measurement (check_render_skip) showed a x0.99 speedup.
+                         # The original explanation ("equivalence is proven; EGL rendering is
+                         # GPU-side so cutting renders does not help") has been withdrawn:
+                         # under gymnasium 1.x set_render_skip degrades to a no-op, which
+                         # explains both the identical observations and the x0.99
+                         # (see the docstrings in src/grpo/spawn_env.py and check_render_skip.py)
+  max_env_steps: 300
+  num_sde_steps: 10
+  noise_level: 0.35      # SDE diversity. At 0.5 a weak policy's successes vanish, so weakened
+  seed: 7
+
+rs_sft:
+  data_dir: /content/rollout_data
+  sft_checkpoint: /content/outputs/sft_base_heldout/checkpoints/last
+  output_dir: /content/rs_sft_run
+  model_type: smolvla
+  steps: 400
+  lr: 1.0e-5
+  micro_batch_size: 8
+  min_success: 4
+  seed: 0
+
+dpo:
+  data_dir: /content/rollout_data
+  sft_checkpoint: /content/outputs/sft_base_heldout/checkpoints/last
+  output_dir: /content/dpo_run
+  model_type: smolvla
+  steps: 300
+  lr: 5.0e-6
+  pairs_per_step: 4
+  beta: 100.0            # tuned so mean_logits in metrics.jsonl is O(1)
+  sft_coef: 0.1          # winning-side SFT anchor (prevents unlearning)
+  seed: 0

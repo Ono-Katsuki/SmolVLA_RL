@@ -1,0 +1,30 @@
+# Smoke config for verifying GRPO wiring.
+# 1 task × G=2 × 2 iterations runs the full path — rollout → logprob
+# recomputation → gradient update → checkpoint save — as quickly as possible.
+# No learning outcome is expected (with a pre-SFT checkpoint, all episodes
+# failing → advantage=0 → KL term only is the normal result).
+
+sft_checkpoint: "/content/drive/MyDrive/SmolVLA_RL/outputs/curve2k/checkpoints/last"
+output_dir:     "/content/drive/MyDrive/SmolVLA_RL/grpo_outputs/smoke"
+
+model_type: smolvla
+
+task_ids:
+  - libero_spatial:0
+
+group_size: 2
+num_iterations: 2
+num_epochs_per_iter: 1
+max_env_steps: 150          # shorten rollouts (normally 400)
+
+num_sde_steps: 10
+noise_level: 0.5
+
+clip_eps: 0.2
+kl_coef: 0.04
+lr: 1.0e-5
+micro_batch_size: 4
+freeze_vlm: true
+
+seed: 0
+save_every: 2

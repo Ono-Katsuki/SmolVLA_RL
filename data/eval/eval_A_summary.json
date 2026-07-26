@@ -1,0 +1,146 @@
+{
+  "description": "Primary eval (A): 4 arms on the 8 GRPO training tasks, seed=900000 (disjoint from all training seeds, but NOTE: LIBERO-Plus selects the initial state by environment index, not by the seed -- these are the TRAINING initial states; see the confound paragraph in the paper), 15 episodes/task, paired same-task/same-seed. inproc engine. Task 1477 excluded: deterministic LIBERO-plus renderer shape bug (1080 vs 388800) for all arms -> effective 7 tasks x 15 = 105 episodes/arm. Completed 2026-07-24 (A100 reclaim -> L4 fallback, per-task Drive checkpointing preserved 22/32 tasks on recovery).",
+  "suite": "libero_spatial",
+  "seed": 900000,
+  "eval_trials": 15,
+  "task_ids_all": [
+    79,
+    108,
+    1477,
+    1530,
+    1817,
+    1955,
+    2126,
+    2172
+  ],
+  "task_ids_effective": [
+    79,
+    108,
+    1530,
+    1817,
+    1955,
+    2126,
+    2172
+  ],
+  "excluded": {
+    "1477": "renderer broadcast shape bug (1080)->(388800), all arms"
+  },
+  "per_task_successes_out_of_15": {
+    "sft": {
+      "79": 7,
+      "108": 9,
+      "1530": 0,
+      "1817": 4,
+      "1955": 2,
+      "2126": 4,
+      "2172": 4
+    },
+    "rs_sft": {
+      "79": 8,
+      "108": 11,
+      "1530": 1,
+      "1817": 12,
+      "1955": 5,
+      "2126": 3,
+      "2172": 5
+    },
+    "dpo": {
+      "79": 4,
+      "108": 10,
+      "1530": 1,
+      "1817": 5,
+      "1955": 5,
+      "2126": 8,
+      "2172": 4
+    },
+    "grpo": {
+      "79": 8,
+      "108": 8,
+      "1530": 0,
+      "1817": 5,
+      "1955": 2,
+      "2126": 4,
+      "2172": 6
+    }
+  },
+  "aggregate": {
+    "sft": {
+      "n_success": 30,
+      "n_total": 105,
+      "success_rate": 0.2857,
+      "ci95_task": [
+        0.1524,
+        0.419
+      ]
+    },
+    "rs_sft": {
+      "n_success": 45,
+      "n_total": 105,
+      "success_rate": 0.4286,
+      "ci95_task": [
+        0.2476,
+        0.619
+      ]
+    },
+    "dpo": {
+      "n_success": 37,
+      "n_total": 105,
+      "success_rate": 0.3524,
+      "ci95_task": [
+        0.2286,
+        0.4857
+      ]
+    },
+    "grpo": {
+      "n_success": 33,
+      "n_total": 105,
+      "success_rate": 0.3143,
+      "ci95_task": [
+        0.1714,
+        0.4476
+      ]
+    }
+  },
+  "paired_vs_sft": {
+    "rs_sft": {
+      "n_paired": 105,
+      "method_win_sft_lose": 19,
+      "sft_win_method_lose": 4,
+      "net_paired_wins": 15,
+      "mcnemar_p": 0.003,
+      "per_task_diff_ci95_taskboot": [
+        0.0286,
+        0.2857
+      ],
+      "per_task_diff_ci_bonf_005over3": [
+        0.019,
+        0.3238
+      ]
+    },
+    "dpo": {
+      "n_paired": 105,
+      "method_win_sft_lose": 16,
+      "sft_win_method_lose": 9,
+      "net_paired_wins": 7,
+      "mcnemar_p": 0.23,
+      "per_task_diff_ci95_taskboot": [
+        -0.0381,
+        0.1619
+      ]
+    },
+    "grpo": {
+      "n_paired": 105,
+      "method_win_sft_lose": 11,
+      "sft_win_method_lose": 8,
+      "net_paired_wins": 3,
+      "mcnemar_p": 0.648,
+      "per_task_diff_ci95_taskboot": [
+        -0.019,
+        0.0762
+      ],
+      "concordant_both_success": 22,
+      "concordant_both_fail": 64
+    }
+  },
+  "gpu_note": "eval executed on L4 (A100 unavailable at recovery); env sim is CPU-bound so results are hardware-agnostic."
+}

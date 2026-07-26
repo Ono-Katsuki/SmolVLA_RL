@@ -1,0 +1,45 @@
+# Screening for selecting GRPO/RS-SFT/DPO training tasks.
+# 24 candidates drawn with seed=123 from in-dist (non-camera) tasks (the 5
+# eval tasks from seed=42 already excluded). Each task runs G=4 × 1 round,
+# nearly deterministic (noise 0.05), to measure the SFT policy's raw success
+# rate; tasks that show successes become the post-training training set.
+#
+#   python -m src.post_train.collect --config configs/screen_tasks.yaml
+#
+# The top 8 tasks are picked by per-task success count in summary.json.
+
+collect:
+  sft_checkpoint: /content/outputs/sft_base_heldout/checkpoints/last
+  output_dir: /content/screen_data
+  model_type: smolvla
+  task_ids:
+    - libero_spatial:79
+    - libero_spatial:107
+    - libero_spatial:108
+    - libero_spatial:179
+    - libero_spatial:221
+    - libero_spatial:278
+    - libero_spatial:328
+    - libero_spatial:547
+    - libero_spatial:550
+    - libero_spatial:1059
+    - libero_spatial:1062
+    - libero_spatial:1069
+    - libero_spatial:1076
+    - libero_spatial:1155
+    - libero_spatial:1213
+    - libero_spatial:1477
+    - libero_spatial:1527
+    - libero_spatial:1530
+    - libero_spatial:1817
+    - libero_spatial:1955
+    - libero_spatial:2098
+    - libero_spatial:2126
+    - libero_spatial:2172
+    - libero_spatial:2226
+  group_size: 4
+  rounds: 1
+  max_env_steps: 300
+  num_sde_steps: 10
+  noise_level: 0.05      # nearly deterministic (measures raw policy performance)
+  seed: 11

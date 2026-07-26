@@ -1,0 +1,49 @@
+{
+  "description": "Re-analysis of eval A restricted to WAVE 0 -- the only subset with outcome-independent pairing. LIBERO-Plus advances init_state_id by n_envs per reset, and a terminated episode triggers TWO resets, so each arm's wave-1 initial states depend on its own wave-0 successes. Wave 0 (first 8 of 15 episodes per task) is genuinely paired; wave 1 (remaining 7) is not. Derived from the per-episode seed/success records in the eval_A result.json files archived with the run outputs.",
+  "wave0_paired": {
+    "episodes_per_arm": 56,
+    "tasks": 7,
+    "sft": {
+      "k": 17,
+      "rate": 0.3036
+    },
+    "rs_sft": {
+      "k": 24,
+      "rate": 0.4286
+    },
+    "rs_sft_vs_sft": {
+      "discordant_rs_win": 10,
+      "discordant_sft_win": 3,
+      "net": 7,
+      "mcnemar_p": 0.0923,
+      "diff_ci95_pp": [
+        -3.6,
+        30.4
+      ],
+      "significant": false
+    }
+  },
+  "wave1_unpaired_for_reference": {
+    "episodes_per_arm": 49,
+    "sft": {
+      "k": 13,
+      "rate": 0.2653
+    },
+    "rs_sft": {
+      "k": 21,
+      "rate": 0.4286
+    },
+    "rs_sft_vs_sft": {
+      "discordant_rs_win": 9,
+      "discordant_sft_win": 1,
+      "net": 8,
+      "mcnemar_p": 0.0215,
+      "diff_ci95_pp": [
+        4.1,
+        32.7
+      ],
+      "caveat": "pairing is broken here; reported only to show where the full-sample significance came from"
+    }
+  },
+  "conclusion": "On the genuinely paired subset the RS-SFT advantage is NOT significant (p=0.092; task-clustered CI includes zero). The point estimate is unchanged (42.9% vs 30.4%). The significance reported for the full 105 episodes rests substantially on wave 1, where the pairing assumption fails."
+}

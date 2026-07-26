@@ -1,0 +1,51 @@
+# GRPO on LIBERO-Plus (SmolVLA)
+# Port of π_RL's (arXiv:2510.25889) Flow-SDE + PPO-style GRPO to SmolVLA.
+# Matched to the RLinf defaults (noise_level=0.5, entropy_bonus=0.0, joint_logprob=False for flow_sde).
+
+sft_checkpoint: "/content/outputs/sft_base_heldout/checkpoints/last"
+output_dir:     "/content/grpo_run"  # VM-local (saves Drive space)
+
+# --- Policy type (resolved via the registry in adapters/__init__.py) ---
+# One of smolvla | pi0 | pi05. Switching to the π0 family only requires changing this.
+model_type: smolvla
+
+# --- Task set ---
+# See configs/grpo_prod.yaml for the tasks actually used in production (top 8 from screening).
+# The following is a template placeholder. Replace it for new experiments.
+task_ids:
+  - libero_spatial:79
+  - libero_spatial:108
+  - libero_spatial:1477
+  - libero_spatial:1530
+  - libero_spatial:1817
+  - libero_spatial:1955
+  - libero_spatial:2126
+  - libero_spatial:2172
+
+# --- Rollout ---
+group_size: 8              # episodes drawn per task (GRPO's G)
+num_iterations: 16         # 8 tasks × G=8 parallel rollouts at ~20 min/iter → finishes overnight
+num_epochs_per_iter: 1     # passes over the rollout data (2 passes × step per micro-batch
+                           # was 168 steps/iter and collapsed the policy — run3 measured 0.23→0.02)
+accum_microbatches: 64     # accumulate all micro-batches (~42) → 1 optimizer step / epoch.
+                           # Even accum=4 (~11 steps/iter) showed a slow monotone decline in
+                           # success (run4: 0.30→0.33→0.23→0.16). A full-batch gradient averaged
+                           # over all 64 episodes minimizes noise drift
+max_env_steps: 300         # libero_spatial caps out at ~280 steps
+
+# --- Flow-SDE ---
+num_sde_steps: 10          # SmolVLA standard
+noise_level: 0.35          # RLinf default is 0.5, but weakened since success signals vanish with a weak initial policy
+
+# --- GRPO ---
+clip_eps: 0.2
+kl_coef: 0.0               # first RL run has no anchor (see the comment in grpo_prod.yaml).
+                           # Enabling it requires calibration (the joint KL has large magnitude).
+lr: 1.0e-5
+micro_batch_size: 8        # recompute logprobs for same-task samples together
+reward_mode: staged        # privileged-state staged reward (approach/reach/grasp/lift/success).
+                           # With binary success alone, all-fail groups get advantage=0
+freeze_vlm: true           # following π_RL, train only the action expert
+
+seed: 0
+save_every: 4

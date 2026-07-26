@@ -1,0 +1,20 @@
+# The experiments were tested with lerobot 0.6.1 (not published on PyPI; taken from
+# main, after the v0.6.0 tag). PyPI only carries up to 0.4.4 and there is no v0.6.1
+# tag, so we pin the exact main commit the VM actually installed (measured from
+# Colab's pip direct_url.json). Tracking @main instead risks changes to the eval
+# output schema or to private APIs, which would break the results/reproducibility.
+lerobot[smolvla,dataset] @ git+https://github.com/huggingface/lerobot.git@1bb9933215dcb7ffeeae6d3746cda3f73f5a59e2
+av>=15.0.0,<16.0.0
+robosuite==1.4.1
+# robosuite 1.4.1 calls the old mj_fullM(m, dst, qM) API. The breaking change in
+# mujoco 3.10.0 (mj_fullM(m, d, dst)) makes that a TypeError, so the upper bound is pinned.
+mujoco>=3.2,<3.10
+bddl==1.0.1
+easydict
+transforms3d
+hydra-core
+huggingface_hub
+datasets
+Wand==0.6.13
+scikit-image==0.25.2
+gym==0.26.2

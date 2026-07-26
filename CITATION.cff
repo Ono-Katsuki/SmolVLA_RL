@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this code or the recovered per-episode perturbation labels, please cite the following."
+title: "SmolVLA_RL: Low-Budget Flow-SDE GRPO Fine-Tuning of a Flow-Matching VLA"
+authors:
+  - family-names: Ono
+    given-names: Katsuki
+repository-code: "https://github.com/Ono-Katsuki/SmolVLA_RL"
+license: MIT
+version: "0.1.0"
+date-released: "2026-07-23"
+keywords:
+  - vision-language-action
+  - reinforcement-learning
+  - flow-matching
+  - GRPO
+  - LIBERO
+  - robot-learning
+abstract: >-
+  A single-GPU, single-suite proof of concept for online RL fine-tuning of the
+  flow-matching VLA SmolVLA using a Flow-SDE GRPO objective on LIBERO-Plus. The
+  repository documents two silent gradient pathologies (element-count ratio
+  normalization and chunk-weighting bias), a staged privileged reward with a
+  diagnostic funnel, and a fully scripted Colab pipeline.
+preferred-citation:
+  type: article
+  title: "Low-Budget Online RL for a Flow-Matching VLA: A Flow-SDE GRPO Proof of Concept and the Diagnostics Behind It"
+  authors:
+    - family-names: Ono
+      given-names: Katsuki
+  year: 2026
+  notes: "Preprint; arXiv identifier to be added upon submission."

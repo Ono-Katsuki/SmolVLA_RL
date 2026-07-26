@@ -1,0 +1,78 @@
+# GRPO production config (run6) — the production run after the grpo_loss gradient-scale fix.
+# run5 (grpo_run5) divided the log-ratio by n_elem, crushing the policy gradient
+# by ~1600× so it never learned (kl≈1e-8; literature check: π_RL/Flow-GRPO/DanceGRPO
+# do not normalize by element count). After the fix we restart fresh from SFT, so the
+# output goes to grpo_run7. lr stays at 1e-5.
+# grpo_libero.yaml is the template. Paths assume Colab's /content.
+#
+# Port of π_RL's (arXiv:2510.25889) Flow-SDE + PPO-style GRPO to SmolVLA.
+
+sft_checkpoint: "/content/outputs/sft_base_heldout/checkpoints/last"
+output_dir:     "/content/grpo_run7"
+drive_mirror:   "/content/drive/MyDrive/SmolVLA_RL/grpo_run7"  # per-iter metrics and the
+                                                              # latest ckpt go to Drive (guards against VM preemption)
+resume:         true          # resume from drive_mirror/ckpt_latest if present
+
+model_type: smolvla
+
+# --- Task set ---
+# The 24 candidates (configs/screen_tasks.yaml) were screened with SDE rollouts and
+# selected by the explicit rule in src/select_grpo_tasks.py (top 8 by success rate →
+# success count → ascending task_id).
+# Not hand-written; can be regenerated from screen_data/summary.json:
+#   python -m src.select_grpo_tasks --summary screen_data/summary.json --emit_yaml
+# 2226 dropping out is a consequence of the tiebreak (drop the largest id) when seven
+# tasks tied at 1/4. No overlap with the evaluation tasks (eval_heldout.py's in_dist
+# draw). task_id is LeRobot 0-based.
+task_ids:
+  - libero_spatial:79
+  - libero_spatial:108
+  - libero_spatial:1477
+  - libero_spatial:1530
+  - libero_spatial:1817
+  - libero_spatial:1955
+  - libero_spatial:2126
+  - libero_spatial:2172
+
+# --- Rollout ---
+group_size: 8
+num_iterations: 20         # Budget cap. Measured ~80 min/iter (about 2× the estimate), so 30
+                           # would mean ~40 h ≈ over budget on GRPO alone. Capped at 20 to leave
+                           # budget for the 4-arm evaluation. Since resume picks up from
+                           # ckpt_latest/ITER.txt, the run7 launched with 16 also reads this
+                           # value on relaunch and continues 16→20. With save_every=4, ckpts
+                           # remain at 4/8/12/16/20, so an early ckpt can go to evaluation if
+                           # the budget gets tight.
+                           # save_every=4 also leaves intermediate ckpts (16/20/24/28/30), allowing early stopping
+num_epochs_per_iter: 1     # passes over the rollout data (2 passes × step per micro-batch was
+                           # 168 steps/iter and collapsed the policy — run3 measured 0.23→0.02)
+accum_microbatches: 64     # accumulate all micro-batches (~42) → 1 optimizer step/epoch (full-batch gradient).
+                           # Even accum=4 showed a slow monotone success decline (run4: 0.30→0.33→0.23→0.16)
+max_env_steps: 300
+rollout_workers: 3         # roll out tasks 3-way parallel (process count = 3 × group_size).
+                           # (Note) the apparent "deadlock" at iter3 was a misdiagnosis: the
+                           # parent pid waiting in futex_wait for worker children is normal, and
+                           # in fact 25 child workers were saturating ~12 cores running rollouts
+                           # (GPU 0% is normal since LIBERO/EGL is CPU-bound). 3-way parallelism
+                           # runs fine, so it is kept.
+
+# --- Flow-SDE ---
+num_sde_steps: 10
+noise_level: 0.35          # RLinf default is 0.5, but weakened since success signals vanish with a weak initial policy
+
+# --- GRPO ---
+clip_eps: 0.2
+kl_coef: 0.0               # First RL run has no KL anchor (DanceGRPO style).
+                           # It used to say 0.04 while the implementation's n_elem normalization
+                           # made it effectively a no-op, so we stop that lie and turn it off
+                           # explicitly. The ~1600-dim joint KL has too large a magnitude to pick
+                           # an effective coefficient before experiments, so a calibrated KL will
+                           # be added later after measuring necessity via the drift metric +
+                           # held-out evaluation.
+lr: 1.0e-5
+micro_batch_size: 8
+reward_mode: staged        # privileged-state staged reward (approach/reach/grasp/lift/success)
+freeze_vlm: true           # following π_RL, train only the action expert
+
+seed: 0
+save_every: 4
