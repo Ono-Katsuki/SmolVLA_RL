@@ -37,9 +37,19 @@ optimising moved slightly (+0.0025/iter, t = +2.44), and the task success rate i
 is supposed to stand in for did not move (+0.0033/iter, t = +1.54). With no KL
 anchor that shape is drift towards the shaped reward without task improvement,
 which is why the next run is a question about the anchor and not only about step
-count. Reward rising under a reward-maximising objective is evidence the gradient
+count. The drift decelerates without flattening: increments halve from 0.40/iter
+over the first five iterations to 0.20 over the last five, the quadratic term is
+-0.0047 (t = -3.65), and the second-half slope is still +0.185/iter. Reward rising under a reward-maximising objective is evidence the gradient
 path works, the way a falling loss is; it is not evidence the policy got better at
-the task. Fits are exploratory OLS, not preregistered; two of the three would not
+the task. Fits are plain OLS on purpose. Training-curve residuals usually carry positive
+serial correlation, which would understate the standard error, so that was checked
+first: Durbin-Watson is 2.12 for success (lag-1 rho -0.13) and 1.65 for reward
+(rho +0.15) — no autocorrelation worth correcting. Newey-West at L = 1..3 was
+computed anyway and moved both t values **up**, success from 1.54 to 2.15 with a CI
+excluding zero. We did not adopt it: HAC estimators are unreliable at n = 20, and
+taking a correction because it happens to help is the move this project exists to
+avoid. The favourable number is recorded rather than discarded. Fits are
+exploratory, not preregistered; two of the three would not
 survive a multiplicity correction, and the per-iteration binomial standard error
 of ±5.7 pp is the size of the entire top-panel change. Regenerate with
 `analysis/plot_run8_divergence.py`.
@@ -383,9 +393,11 @@ metric for post-training — did not survive the audit.
 > correction of those two claims. **This note exists so that the change reads as the
 > correction of a stale statement rather than as quietly tidying away an
 > inconvenient claim.** The same kind of staleness — the disproven advice that
-> "setting the offset to 32 or above yields held-out initial states", still sitting
-> in `eval_heldout.py`'s docstring — is what an external review caught, and it is
-> what triggered this sweep.
+> "setting the offset to 32 or above yields held-out initial states", which was at
+> that point still sitting in `eval_heldout.py`'s docstring — is what an external
+> review caught, and it is what triggered this sweep. That docstring has since been
+> corrected; this sentence is in the past tense because leaving it in the present
+> tense would have made the correction record itself the next stale claim.
 
 ## Repository layout
 
@@ -493,7 +505,7 @@ chunk-weighting bias (fixed by episode-equal weighting; run7 vs run8 is a
 single-variable ablation). We also report honestly on the staged privileged reward
 plus funnel diagnostics, a negative result (render_skip is ×0.99, i.e. no effect —
 and since the wrapper had degraded to a no-op, the original explanation for it is
-withdrawn), the drift plateau seen without a KL anchor, and **the audit of the
+withdrawn), the decelerating but never-flattening drift seen without a KL anchor, and **the audit of the
 evaluation itself together with the preregistered null**. The conclusion is that no
 method is separated from SFT once the evaluation is built so that it can be.
 

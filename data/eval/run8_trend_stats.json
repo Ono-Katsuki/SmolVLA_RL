@@ -1,0 +1,63 @@
+{
+  "description": "Trend statistics for run8's 20 GRPO iterations, as plotted in assets/run8_divergence.png. Recorded so the autocorrelation check -- including the correction we computed and declined to adopt -- is auditable rather than only asserted.",
+  "source": "grpo_run8/metrics.jsonl, 20 iterations, 64 episodes each",
+  "ols": {
+    "success_rate": {
+      "slope_per_iter": 0.00332,
+      "se": 0.00216,
+      "t": 1.54,
+      "significant": false
+    },
+    "mean_reward": {
+      "slope_per_iter": 0.00251,
+      "se": 0.00103,
+      "t": 2.44,
+      "significant": true
+    },
+    "drift": {
+      "slope_per_iter": 0.2084,
+      "se": 0.00849,
+      "t": 24.55,
+      "significant": true
+    }
+  },
+  "autocorrelation": {
+    "durbin_watson": {
+      "success_rate": 2.115,
+      "mean_reward": 1.645
+    },
+    "lag1_rho": {
+      "success_rate": -0.133,
+      "mean_reward": 0.145
+    },
+    "verdict": "No positive serial correlation worth correcting."
+  },
+  "newey_west_computed_but_not_adopted": {
+    "success_rate": {
+      "L1_t": 2.15,
+      "L2_t": 2.15,
+      "L3_t": 2.31,
+      "L1_ci95": [
+        8e-05,
+        0.00657
+      ]
+    },
+    "mean_reward": {
+      "L1_t": 3.06,
+      "L2_t": 2.93,
+      "L3_t": 3.01
+    },
+    "why_not_adopted": "HAC standard errors are unreliable at n=20 and both t values moved UP, which would have turned the non-significant success trend significant. Adopting a correction because it favours the result is the failure mode this project is about. OLS is reported."
+  },
+  "drift_shape": {
+    "increment_mean_first5": 0.401,
+    "increment_mean_last5": 0.2,
+    "quadratic_term": -0.00465,
+    "quadratic_t": -3.65,
+    "slope_iters_0_9": 0.2688,
+    "slope_iters_10_19": 0.1846,
+    "verdict": "Decelerating but not flattening. Calling it a plateau overstated it."
+  },
+  "multiplicity": "Three trends inspected, none preregistered; two of the three would not survive a correction.",
+  "per_iteration_binomial_se_pp": 5.73
+}
