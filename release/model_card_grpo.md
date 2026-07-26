@@ -19,7 +19,7 @@ tags:
 SmolVLA fine-tuned with **online reinforcement learning (Flow-SDE GRPO)** on the
 `libero_spatial` suite of LIBERO-Plus, on a single-GPU budget (1x Colab A100,
 20 iterations x 64 episodes/iteration). This is the RL arm of a small,
-diagnostics-focused proof-of-concept study; see the paper and repository for the
+diagnostics-focused proof-of-concept study; see the preprint (10.5281/zenodo.21596933) and repository for the
 full story, including the failure modes the study documents.
 
 > **Headline result is a null.** On the study's preregistered test — this model
@@ -30,9 +30,9 @@ full story, including the failure modes the study documents.
 > checkpoint it started from. Details under *Evaluation*.
 
 - **Repository (code, configs, diagnostics):** https://github.com/Ono-Katsuki/SmolVLA_RL
-- **Paper:** arXiv:XXXX.XXXXX (PRE-RELEASE: fill before publishing) <!-- FILL: arXiv id after submission -->
+- **Paper:** [10.5281/zenodo.21596933](https://doi.org/10.5281/zenodo.21596933) (preprint; not published or accepted anywhere)
 - **SFT baseline checkpoint (direct parent of this model):**
-  `<HF_USERNAME> (PRE-RELEASE: fill before publishing)/smolvla-sft-libero-spatial-heldout` <!-- FILL: link after upload -->
+  `katsukiono/smolvla-libero-spatial-4arm` (subfolder `sft/`)
 
 ## Model description
 
@@ -192,7 +192,7 @@ given in the repository's `requirements.txt` for exact reproduction):
 ```python
 from lerobot.policies.smolvla.modeling_smolvla import SmolVLAPolicy
 
-policy = SmolVLAPolicy.from_pretrained("<HF_USERNAME> (PRE-RELEASE: fill before publishing)/smolvla-grpo-libero-spatial")
+policy = SmolVLAPolicy.from_pretrained("katsukiono/smolvla-libero-spatial-4arm", subfolder="grpo/")
 ```
 
 Evaluation-ready wiring (env construction, camera-name mapping, paired seeds) is
@@ -214,8 +214,9 @@ derivatives. The fine-tuning code in the release repository is MIT.
   title   = {Low-Budget Online RL for a Flow-Matching VLA: A Flow-SDE GRPO
              Proof of Concept and the Diagnostics Behind It},
   author  = {Ono, Katsuki},
-  journal = {arXiv preprint arXiv:XXXX.XXXXX (PRE-RELEASE: fill before publishing)},
+  doi     = {10.5281/zenodo.21596933},
+  note    = {Preprint; not published or accepted anywhere},
   year    = {2026}
 }
 ```
-<!-- FILL: replace arXiv:XXXX.XXXXX (PRE-RELEASE: fill before publishing) after submission -->
+
