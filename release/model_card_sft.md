@@ -21,7 +21,7 @@ repository below; it is released so the RL results can be reproduced from the
 exact same starting point.
 
 - **Repository:** https://github.com/Ono-Katsuki/SmolVLA_RL
-- **Paper:** [10.5281/zenodo.21596933](https://doi.org/10.5281/zenodo.21596933) (preprint; not published or accepted anywhere)
+- **Paper:** [10.5281/zenodo.21596932](https://doi.org/10.5281/zenodo.21596932) — all versions; this one is 10.5281/zenodo.21596933 (preprint; not published or accepted anywhere)
 - **RL fine-tune of this model:** `katsukiono/smolvla-libero-spatial-4arm`
   (subfolder `grpo/`)
 
@@ -81,4 +81,4 @@ carries no explicit license tag). Fine-tuning code in the repository is MIT.
 ## Citation
 
 See the citation block in the repository's `CITATION.cff`, or the paper
-(10.5281/zenodo.21596933).
+(10.5281/zenodo.21596932).
