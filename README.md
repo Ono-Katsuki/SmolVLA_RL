@@ -26,6 +26,33 @@ exploratory probe. This README states that gap explicitly rather than glossing i
 > and the numbers below are all reproducible from the files in `data/eval/` with
 > the scripts in `analysis/`. See [Manuscript](#manuscript) below.
 
+
+## What the runs actually show
+
+![What 20 GRPO iterations moved](assets/run8_divergence.png)
+
+Twenty iterations of Flow-SDE GRPO on SmolVLA, one run, `kl_coef = 0`. The policy
+moved a great deal (drift slope +0.208/iter, t = +24.55), the reward it is
+optimising moved slightly (+0.0025/iter, t = +2.44), and the task success rate it
+is supposed to stand in for did not move (+0.0033/iter, t = +1.54). With no KL
+anchor that shape is drift towards the shaped reward without task improvement,
+which is why the next run is a question about the anchor and not only about step
+count. Reward rising under a reward-maximising objective is evidence the gradient
+path works, the way a falling loss is; it is not evidence the policy got better at
+the task. Fits are exploratory OLS, not preregistered; two of the three would not
+survive a multiplicity correction, and the per-iteration binomial standard error
+of ±5.7 pp is the size of the entire top-panel change. Regenerate with
+`analysis/plot_run8_divergence.py`.
+
+![Every between-arm contrast](assets/eval_intervals.png)
+
+Every contrast this project can report, with zero marked. The only interval that
+excludes zero is the one we withdrew: eval A ran on the *training* initial states
+and its pairing breaks for 7 of 15 episodes per task, so its full sample is not a
+valid paired contrast. The withdrawn rows are drawn rather than deleted, because
+withdrawing a result means showing what was withdrawn. Regenerate with
+`analysis/plot_eval_intervals.py`.
+
 ## Main results (all real data)
 
 **The short version**: once the evaluation is built so that the confounds are gone,
