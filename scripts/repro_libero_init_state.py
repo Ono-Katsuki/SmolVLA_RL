@@ -16,23 +16,30 @@ itself the moment an episode terminates, and `terminated` is set from
 autoreset mode, that terminated slot is reset *again* on the following
 `venv.step()` call.
 
-Net effect: a slot whose episode ended early consumes THREE initial states per
-rollout (the explicit reset, the internal reset inside `step`, the autoreset)
-while a slot that ran to the step limit consumes ONE. The two slots therefore
-begin the next rollout at different, outcome-dependent offsets. Which initial
-states an experiment visits then depends on which policy happened to succeed,
-so two policies cannot be compared on a fixed set of initial states by reusing
-a vector env across rollouts.
+Net effect: a slot that terminated once, early, consumes AT LEAST THREE initial
+states per rollout (the explicit reset, the internal reset inside `step`, the
+autoreset) while a slot that never terminated consumes ONE. "At least" is the
+honest bound: after the autoreset the slot is running a fresh episode and is
+still being stepped, so it can terminate again and consume more. The two slots
+therefore begin the next rollout at different, outcome-dependent offsets. Which
+initial states an experiment visits then depends on which policy happened to
+succeed, so two policies cannot be compared on a fixed set of initial states by
+reusing a vector env across rollouts.
 
 HOW TERMINATION IS FORCED
 -------------------------
-LIBERO terminates only on success, and no real policy reliably succeeds inside a
-short scripted budget (this reproduction sends zero actions, which never
-succeed). So this script MONKEY-PATCHES the underlying robosuite env's
-`check_success()` to return True exactly once, for exactly one slot, at a fixed
-step. That patch is announced on stdout when it fires. It is a stand-in for a
-policy that genuinely solved the task; nothing else about the env is altered,
-and the reset bookkeeping under test is untouched.
+`terminated = done or is_success`, so success is a sufficient cause of
+termination but not the only one -- `done` from the underlying env is a second
+path, and this script does not prove that path cannot fire. What it does is make
+every reset visible, so an unforced termination would show up in the trace
+rather than be assumed away. No real policy reliably succeeds inside a short
+scripted budget, and this reproduction sends zero actions.
+
+So the script MONKEY-PATCHES the underlying robosuite env's `check_success()` to
+return True exactly once, for exactly one slot, at a fixed step. That patch is
+announced on stdout when it fires. It is a stand-in for a policy that genuinely
+solved the task; nothing else about the env is altered, and the reset
+bookkeeping under test is untouched.
 
 A SyncVectorEnv is used so the instrumentation prints from the main process. The
 mechanism is the autoreset, not the vectorisation: AsyncVectorEnv defaults to the
