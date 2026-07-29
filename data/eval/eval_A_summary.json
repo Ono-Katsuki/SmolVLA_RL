@@ -1,5 +1,5 @@
 {
-  "description": "Primary eval (A): 4 arms on the 8 GRPO training tasks, seed=900000 (disjoint from all training seeds, but NOTE: LIBERO-Plus selects the initial state by environment index, not by the seed -- these are the TRAINING initial states; see the confound paragraph in the paper), 15 episodes/task, paired same-task/same-seed. inproc engine. Task 1477 excluded: deterministic LIBERO-plus renderer shape bug (1080 vs 388800) for all arms -> effective 7 tasks x 15 = 105 episodes/arm. Completed 2026-07-24 (A100 reclaim -> L4 fallback, per-task Drive checkpointing preserved 22/32 tasks on recovery).",
+  "description": "Primary eval (A): 4 arms on the 8 GRPO training tasks, seed=900000 (disjoint from all training seeds, but NOTE: LIBERO-Plus selects the initial state by environment index, not by the seed -- these are the TRAINING initial states; see the confound paragraph in the paper), 15 episodes/task, same task set across arms; NOTE the pairing holds only for the first wave (8 episodes/task, 56/arm) because a terminated episode triggers at least two resets and the initial-state index therefore advances outcome-dependently -- the full-sample paired statistics below are what we originally computed and are WITHDRAWN. inproc engine. Task 1477 excluded: deterministic LIBERO-plus renderer shape bug (1080 vs 388800) for all arms -> effective 7 tasks x 15 = 105 episodes/arm. Completed 2026-07-24 (A100 reclaim -> L4 fallback, per-task Drive checkpointing preserved 22/32 tasks on recovery).",
   "suite": "libero_spatial",
   "seed": 900000,
   "eval_trials": 15,
@@ -102,6 +102,7 @@
     }
   },
   "paired_vs_sft": {
+    "_WITHDRAWN": "WITHDRAWN. n_paired=105 is wrong: only wave 0 (8 of 15 episodes per task, 56 per arm) is genuinely paired, because a terminated episode advances the initial-state index outcome-dependently. Every number in this object -- including mcnemar_p 0.003 for rs_sft, which was this study's original headline -- is computed over 105 episodes of which 49 are not exchangeable across arms. Retained so that what we originally computed can be checked, NOT for citation. The defensible re-analysis is eval_A_wave0_reanalysis.json (rs_sft vs sft: +12.5 pp, exact McNemar p = 0.092, not significant). Marked 2026-07-29; the withdrawal itself dates from the 2026-07-25 audit and was already in the README and the manuscript -- this file was the copy that never received it.",
     "rs_sft": {
       "n_paired": 105,
       "method_win_sft_lose": 19,
@@ -142,5 +143,5 @@
       "concordant_both_fail": 64
     }
   },
-  "gpu_note": "eval executed on L4 (A100 unavailable at recovery); env sim is CPU-bound so results are hardware-agnostic."
+  "gpu_note": "eval executed on L4 (A100 unavailable at recovery). We previously called the results hardware-agnostic because the env sim is CPU-bound; that explanation is withdrawn (see the render-skip audit) and we never ran the same checkpoint on both GPUs, so a GPU effect is unmeasured rather than excluded."
 }
