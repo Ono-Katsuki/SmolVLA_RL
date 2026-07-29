@@ -1,7 +1,10 @@
 """Live verification of the staged reward path (~2 min on Colab).
 
-LIBERO never self-truncates failed episodes (terminated fires only on
-success), so after running some random actions we call
+LIBERO does not self-truncate: LiberoEnv.step returns truncated=False
+unconditionally, and terminated = done or is_success -- overwhelmingly success
+here, though the underlying env's done is a second possible cause (this used to
+say "only on success"; corrected 2026-07-29). So after running some random
+actions we call
 StagedRewardWrapper.staged_now() directly via venv.call and check whether the
 privileged probe is alive inside the spawn workers. If a success terminal
 happens to occur, extraction from the gymnasium 1.x info aggregation is
