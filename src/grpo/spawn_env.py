@@ -158,11 +158,16 @@ def make_spawn_vec_env(
     (rollout collection / GRPO training).
 
     **Shifting this base does NOT buy a held-out evaluation on a trained task**
-    (analysis of 2026-07-25). A terminated episode triggers two resets
-    (LiberoEnv.step's internal reset plus the vector env's autoreset), so the
-    indices collection touches are outcome-dependent and scattered, reaching as
-    high as 79, and they wrap via % N: at N=50 that blocks 32 of the 50 states and
-    no free window of width 15 exists (enumerate with src/init_state_coverage.py).
+    (analysis of 2026-07-25). A terminated episode triggers at least two resets
+    (LiberoEnv.step's internal reset plus the vector env's autoreset; more if that
+    slot, which keeps being stepped, terminates again), so the indices collection
+    touches are outcome-dependent and scattered. src/init_state_coverage.py
+    estimated they reach as high as 79 and, wrapping via % N at N=50, block 32 of
+    the 50 states leaving no free window of width 15 -- but that reconstruction
+    assumes exactly one termination plus one autoreset per round and can err both
+    ways, so read the figures as an estimate (narrowed 2026-07-29). The operative
+    point survives without them: the visited set is outcome-dependent and not
+    reliably reconstructible, so no offset can be shown to be held out.
     There are exactly two legitimate uses of this base:
       1. evaluating untrained tasks (no contamination is possible, so the offset
          can stay at 0)

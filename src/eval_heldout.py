@@ -6,12 +6,16 @@ for eval_trials episodes and collect per-task outcomes. mode:
     heldout  ... sampled only from camera_pose (viewpoint) perturbation tasks
 
 Statistical caveats (always account for these when claiming results):
-  * Episodes within a task share initial state, difficulty, and perturbation,
-    so they are not independent. The Wilson interval treating episodes as
-    independent Bernoulli trials (ci95_episode) is optimistic (too narrow).
-    The **task bootstrap interval (ci95_task)**, which resamples tasks, is
-    reported alongside; use it to judge superiority between methods or vs.
-    upstream.
+  * Episodes within a task share difficulty and perturbation, and where
+    len(init_states) == 1 they share the initial state too. That does not by
+    itself make them statistically dependent: conditional on a fixed initial
+    state, independently seeded rollouts are independent draws (corrected
+    2026-07-29 -- this docstring used to claim dependence, and that was wrong).
+    What it does mean is that ci95_episode is an interval for success *at the
+    states actually visited*, not for success on the task, because it samples no
+    initial-state variability at all. The **task bootstrap interval (ci95_task)**,
+    which resamples tasks, is reported alongside; use it to judge superiority
+    between methods or vs. upstream.
   * in_dist and heldout are **sampled from different task pools**, so their
     success-rate difference confounds "viewpoint sensitivity" with "task
     difficulty difference". Claiming pure viewpoint generalization would
@@ -171,12 +175,17 @@ class _InprocEvaluator:
         with this offset.** This docstring used to say that "32 or above gives
         initial states neither rollout collection ({0..31}) nor GRPO training
         ({0..7}) ever touched". The analysis of 2026-07-25 showed that is wrong.
-        A successful episode runs two resets, so collection does not touch
-        {0..31} but a scattered set reaching as high as 79, and those wrap via
-        % N, so at N=50 32 of the 50 states are contaminated and no free window
-        of width 15 exists. Evaluating an untrained task cannot suffer this
-        contamination in principle, so the offset can stay at 0 (see the
-        --init_state_offset help as well).
+        A terminated episode runs extra resets, so collection does not touch
+        {0..31} but a scattered, outcome-dependent set. That analysis estimated
+        it reaches as high as 79 and, after wrapping via % N, contaminates 32 of
+        50 leaving no free window of width 15; those specific figures rest on a
+        reset model that can err in both directions and are not established
+        (2026-07-29 correction -- see src/init_state_coverage.py). The part that
+        decides this docstring either way is weaker and does hold: the visited
+        set cannot be reconstructed reliably, so no offset can be shown to be
+        held out. Evaluating an untrained task cannot suffer this contamination
+        in principle, so the offset can stay at 0 (see the --init_state_offset
+        help as well).
         """
         import numpy as np
 
@@ -196,10 +205,11 @@ class _InprocEvaluator:
         #   * In LIBERO-Plus the initial state is decided not by the seed but by
         #     episode_index and the number of resets (see the docstring of
         #     spawn_env.make_spawn_vec_env).
-        #   * A terminated episode causes TWO resets (LiberoEnv.step's internal
-        #     reset + the vector env's autoreset), so if the venv is reused the
-        #     second wave's initial state ends up depending on "this arm's own
-        #     success/failure pattern in the first wave", which breaks pairing.
+        #   * A terminated episode causes AT LEAST TWO resets (LiberoEnv.step's
+        #     internal reset + the vector env's autoreset; more if the slot,
+        #     which keeps being stepped, terminates again), so if the venv is
+        #     reused the second wave's initial state ends up depending on "this
+        #     arm's own outcome pattern in the first wave", which breaks pairing.
         #     In practice 7 of the 15 trials in eval A had become unpaired this way.
         # Rebuilding each wave with base = init_state_offset + wave*B0 makes the
         # initial state independent of the arm's success pattern, so it matches
@@ -217,9 +227,11 @@ class _InprocEvaluator:
                 limit = int(env_max or 300)
                 if wave_idx == 0:
                     # Always read N. Even at offset=0, if n_episodes > N the window
-                    # wraps around and evaluates the same initial state twice,
-                    # counting non-independent trials towards n (which makes the CI
-                    # overconfident). This hole exists whether or not an offset is set.
+                    # wraps around and evaluates the same initial state twice.
+                    # Those repeats are not statistically dependent, but they add
+                    # no initial-state variability, so n counts as distinct
+                    # initial conditions episodes that are not (corrected
+                    # 2026-07-29). This hole exists whether or not an offset is set.
                     try:
                         n_init = int(venv.call("_init_states")[0].shape[0])
                     except Exception as e:  # noqa: BLE001
@@ -613,11 +625,13 @@ def main() -> None:
         help="starting index of the initial states used for evaluation. In LIBERO-Plus "
              "it is this, not the seed, that determines the initial state. **Do NOT try "
              "to build a held-out evaluation on an already-trained task with this**: a "
-             "successful episode runs two resets, so collection does not touch {0..31} "
-             "but a scattered set reaching as high as 79, and it then wraps around via "
-             "% N, so at N=50 32 of the 50 states are contaminated and no free window of "
-             "width 15 exists (analysis of 2026-07-25). Evaluating an untrained task "
-             "cannot suffer this contamination in principle, so leaving it at 0 is fine.",
+             "terminated episode runs extra resets, so collection touches a scattered, "
+             "outcome-dependent set rather than {0..31}, and it is not reliably "
+             "reconstructible from the success bits we kept -- no offset can be shown "
+             "to be held out (analysis of 2026-07-25, narrowed 2026-07-29; the "
+             "'32 of 50, no window of width 15' figures it produced are an estimate, "
+             "not a fact). Evaluating an untrained task cannot suffer this "
+             "contamination in principle, so leaving it at 0 is fine.",
     )
     ap.add_argument(
         "--task_ids",

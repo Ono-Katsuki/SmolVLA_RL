@@ -14,7 +14,10 @@ Observations and actions go through the same transform chain as lerobot-eval
 
 Reward is +1 for success at episode end, 0 otherwise (standard LIBERO).
 Envs that are done stop appending to their record (data after gymnasium's
-autoreset is discarded).
+autoreset is discarded). Note they are not frozen: the loop runs until *every*
+slot is done, and policy.rollout / venv.step still cover them, so a done slot
+goes on running a fresh episode whose transitions are dropped but whose resets
+still advance init_state_id. See src/init_state_coverage.py.
 """
 from __future__ import annotations
 
@@ -259,10 +262,13 @@ def collect_group_rollouts(
             if done.all() or step >= limit:
                 break
 
-    # LIBERO never self-truncates failed episodes (terminated fires only on
-    # success). Envs cut off externally at the step limit emit no terminal
-    # info, so call StagedRewardWrapper.staged_now() directly to collect
-    # partial credit. (Envs without the staged wrapper raise AttributeError
+    # LIBERO does not self-truncate: LiberoEnv.step returns truncated=False
+    # unconditionally, and terminated = done or is_success -- overwhelmingly
+    # success here, though the underlying env's done is a second possible cause
+    # (this comment used to say "only on success"; corrected 2026-07-29). Envs
+    # cut off externally at the step limit emit no terminal info, so call
+    # StagedRewardWrapper.staged_now() directly to collect partial credit.
+    # (Envs without the staged wrapper raise AttributeError
     # → degrade to success-only reward)
     if not done.all():
         try:

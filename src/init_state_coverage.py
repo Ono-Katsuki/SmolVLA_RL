@@ -5,10 +5,17 @@ WHY THIS EXISTS
 LIBERO-Plus does not choose the initial state from the reset seed. `LiberoEnv.reset`
 calls `set_init_state(init_states[init_state_id % N])` *after* seeding, where
 `init_state_id` starts at the sub-env's `episode_index` and advances by `n_envs`
-on every reset. Crucially a *terminated* episode causes TWO resets (LiberoEnv
-resets internally on termination, and the vector env autoresets on the next
-step), and LIBERO terminates only on success. So the set of visited indices
-depends on the SUCCESS PATTERN, not just on the episode count.
+on every reset. Crucially a *terminated* episode causes AT LEAST TWO resets
+(LiberoEnv resets internally on termination, and the vector env autoresets on the
+next step). So the set of visited indices depends on the OUTCOME PATTERN, not just
+on the episode count.
+
+"At least" and "outcome", not "exactly" and "success", both matter (2026-07-29):
+after the autoreset the slot is running a fresh episode and is still being
+stepped -- the collection loop runs until *every* slot is done -- so it can
+terminate again and consume more indices. And `terminated = done or is_success`
+leaves the underlying env's `done` as a second sufficient cause, so termination
+is not synonymous with success.
 
 That makes "the training rollouts used states {0..31}" wrong whenever a rollout
 succeeded: a success in round 0 sends that sub-env to 24, 32, 40 instead of
@@ -27,15 +34,32 @@ disjoint from both. Exits non-zero if no such offset exists, because in that
 case the offset approach cannot deliver a held-out evaluation on that task and
 the honest move is to say so rather than run.
 
-WHAT IT ACTUALLY REPORTED FOR THIS PROJECT (2026-07-25)
--------------------------------------------------------
+WHAT IT REPORTED FOR THIS PROJECT (2026-07-25), AND HOW FAR TO TRUST IT
+-----------------------------------------------------------------------
 No offset works. Collection reaches scattered indices as high as 79 rather than
 a clean {0..31}, and once those wrap modulo the real N=50 the blocked set covers
 32 of the 50 states a typical LIBERO-Plus task provides -- there is no free
-contiguous window of the width (15) eval A needed. So this module is a diagnostic
-that closed the offset route, not a recipe for using it: do not read the
-`USE --init_state_offset ...` line below as advice that the route is open in
-general. It prints only in the case where a disjoint window happens to exist.
+contiguous window of the width (15) eval A needed.
+
+**Those specific numbers are an unvalidated estimate, not an established fact
+(corrected 2026-07-29).** They come out of `collection_visited` below, which
+assumes exactly one termination per round followed by exactly one autoreset. That
+assumption can fail in BOTH directions -- see that function's docstring -- so the
+reconstructed set is neither a subset nor a superset of the set actually visited.
+Settling it would take real per-reset initial-state traces, which were never
+recorded. (That gap is itself why the upstream report asks for the initial-state
+index to be exposed per episode: huggingface/lerobot#4152.)
+
+What does not depend on the arithmetic, and is enough on its own: which states
+collection touched is outcome-dependent and cannot be reconstructed reliably from
+the success bits we kept. An offset therefore cannot be *shown* to be held out,
+which is the only thing the decision below ever needed.
+
+So this module is a diagnostic that closed the offset route, not a recipe for
+using it: do not read the `USE --init_state_offset ...` line below as advice that
+the route is open in general. It prints only in the case where a disjoint window
+happens to exist -- and given the above, "disjoint" there means "disjoint from the
+reconstruction", which is weaker than it sounds.
 
 The remedy actually adopted was to evaluate tasks that were never trained on, so
 that no initial state can be contaminated by construction, and to rebuild the
@@ -56,6 +80,27 @@ def collection_visited(successes: list[bool], sub_env: int, group_size: int) -> 
     One venv is built per task and reused across rounds, so the reset counter
     persists: each round consumes ``sub_env + group_size*c`` and then advances
     ``c`` by 1, plus 2 more if that round terminated (i.e. succeeded).
+
+    **This model is known to be wrong in both directions (2026-07-29). Treat the
+    output as an estimate, not as the set actually visited.**
+
+    * It can UNDERCOUNT. After the autoreset the slot runs a fresh episode and is
+      still stepped -- ``rollout.collect`` keeps going until every slot is done --
+      so it can terminate again, and each extra termination costs two more.
+      Nothing records that: ``just_done`` is masked by ``~done``, so a second
+      success is invisible in the episode log this function reads.
+    * It can OVERCOUNT. The ``+2`` assumes an autoreset follows, but the vector
+      env only autoresets on a subsequent ``venv.step``. If the termination lands
+      on the step that makes every slot done, the loop breaks and that reset never
+      happens, costing one rather than two.
+    * ``succeeded`` is read from the success bit, but ``terminated = done or
+      is_success``: the underlying env's ``done`` is a second cause the log cannot
+      distinguish.
+
+    The consequence is not a bias in one direction that could be corrected with a
+    fudge factor. Later rounds start wherever the counter happens to be, so an
+    error in round 0 relocates every subsequent index. The honest reading is that
+    the true visited set is unknown without per-reset traces.
     """
     c = 0
     out = []

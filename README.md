@@ -142,19 +142,26 @@ writing the paper surfaced two confounds:
    RS-SFT and flow-DPO**, and adding episodes would not remove that bias. Two of the
    8 training tasks (1817, 1955) even have `len(init_states) = 1`, so collection,
    GRPO training and every eval-A episode on them started from the identical state.
-2. **The pairing was broken.** A terminated episode triggers two resets
-   (`LiberoEnv.step`'s internal reset plus gymnasium's NEXT_STEP autoreset), so from
-   the second wave onward the initial state depended on **the arm's own success
-   pattern**. Only **56 episodes per arm** are genuinely paired (7 of 15 per task are
+2. **The pairing was broken.** A terminated episode triggers at least two resets
+   (`LiberoEnv.step`'s internal reset plus gymnasium's NEXT_STEP autoreset — at
+   least, because the slot keeps being stepped afterwards and can terminate again),
+   so from the second wave onward the initial state depended on **the arm's own
+   outcome pattern**. Only **56 episodes per arm** are genuinely paired (7 of 15 per task are
    not). On that subset RS-SFT leads by +12.5 pp but the contrast is inconclusive
    (exact McNemar p = 0.092, task-clustered CI [−3.6, +30.4] pp).
 
-**An offset cannot repair this.** Because a successful episode causes two resets,
-collection does not touch a contiguous block like `{0..31}` but a scattered set
-reaching as high as 79, which then wraps via `% N`. At the real N = 50 that blocks 32
-of the 50 states, and **no free window of the required width 15 exists** (enumerate
-with `src/init_state_coverage.py`). The corrected study therefore uses **unseen tasks**
-and a **per-wave vector-env rebuild** instead of an offset. Note also that
+**An offset cannot repair this.** Because a terminated episode causes extra
+resets, collection does not touch a contiguous block like `{0..31}` but a
+scattered, outcome-dependent set — and **we cannot say which set**. The
+reconstruction in `src/init_state_coverage.py` estimated that it reaches as high
+as 79 and, after wrapping via `% N`, blocks 32 of the 50 states leaving no free
+window of the required width 15. That estimate assumes exactly one termination per
+round followed by one autoreset, which can fail in both directions, so
+**the specific figures are not established** (see the correction record). The
+weaker statement is the one that actually decides the question and does hold: the
+visited set is outcome-dependent and not reliably reconstructible, so an offset
+cannot be *shown* to be held out. The corrected study therefore uses **unseen
+tasks** and a **per-wave vector-env rebuild** instead of an offset. Note also that
 `N = len(init_states)` is bimodal: 385 tasks have 1, 1641 have 50, nothing in between.
 
 ### What the study does deliver
@@ -399,6 +406,31 @@ metric for post-training — did not survive the audit.
 > corrected; this sentence is in the past tense because leaving it in the present
 > tense would have made the correction record itself the next stale claim.
 
+> **Correction record (2026-07-29).** Nine statements across this README,
+> `src/init_state_coverage.py`, `src/eval_heldout.py`, `src/grpo/spawn_env.py`,
+> `src/grpo/rollout.py` and `data/eval/eval_A_wave0_reanalysis.json` asserted that
+> a terminated episode causes **exactly two** resets, and that LIBERO **terminates
+> only on success**. Neither is forced by the code. A done slot is not frozen —
+> the collection loop runs until *every* slot is done, so it keeps being stepped,
+> runs a fresh episode, and can terminate again; and `terminated = done or
+> is_success` leaves the underlying env's `done` as a second cause. The
+> reconstruction in `src/init_state_coverage.py` assumes exactly one termination
+> plus one autoreset per round, so it can **undercount and overcount**, which
+> means its "**32 of 50 states blocked, no free window of width 15**" figures are
+> an estimate rather than a fact. The conclusion they were used to support is
+> unchanged and now rests on the weaker claim that actually holds: the visited set
+> is outcome-dependent and not reliably reconstructible, so no offset can be
+> *shown* to be held out. Separately, this repository claimed that repeated
+> episodes from one fixed initial state are "not independent" and make the Wilson
+> interval "optimistic" — that was **statistically wrong**; conditional on a fixed
+> state such rollouts are independent draws, and the real problem is that they
+> sample no initial-state variability. Found by adversarial review of our reply on
+> [huggingface/lerobot#4152](https://github.com/huggingface/lerobot/issues/4152),
+> not by re-examining our own results. The preregistration body is **not** edited;
+> it carries `Amendment 2` instead, because a preregistration whose text moves
+> after the outcome is known is worth less than one with a wrong sentence and an
+> honest note under it.
+
 ## Repository layout
 
 ```
@@ -453,8 +485,8 @@ document that is not here — they stand on their own.
 - **LIBERO-Plus initial states are not selectable by the reset seed** —
   `LiberoEnv.reset()` applies the seed and then overwrites the state with
   `set_init_state(init_states[init_state_id % N])`. On top of that, a terminated
-  episode triggers two resets (the internal one plus gymnasium's autoreset), so
-  **which initial states get visited depends on the outcomes**. Neither "change the
+  episode triggers at least two resets (the internal one plus gymnasium's
+  autoreset), so **which initial states get visited depends on the outcomes**. Neither "change the
   evaluation seed relative to training" nor "shift the offset" produces a held-out
   evaluation on an already-trained task. Minimal reproduction:
   `scripts/repro_libero_init_state.py`; reported upstream as

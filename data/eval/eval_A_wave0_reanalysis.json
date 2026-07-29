@@ -1,5 +1,5 @@
 {
-  "description": "Re-analysis of eval A restricted to WAVE 0 -- the only subset with outcome-independent pairing. LIBERO-Plus advances init_state_id by n_envs per reset, and a terminated episode triggers TWO resets, so each arm's wave-1 initial states depend on its own wave-0 successes. Wave 0 (first 8 of 15 episodes per task) is genuinely paired; wave 1 (remaining 7) is not. Derived from the per-episode seed/success records in the eval_A result.json files archived with the run outputs.",
+  "description": "Re-analysis of eval A restricted to WAVE 0 -- the only subset with outcome-independent pairing. LIBERO-Plus advances init_state_id by n_envs per reset, and a terminated episode triggers at least two resets, so each arm's wave-1 initial states depend on its own wave-0 outcomes. (Narrowed 2026-07-29 from 'TWO resets': a done slot keeps being stepped and can terminate again. This does not affect the wave-0 restriction below, which holds because wave 0 precedes any outcome-dependent history -- it is precisely the reason to restrict rather than to reconstruct.) Wave 0 (first 8 of 15 episodes per task) is genuinely paired; wave 1 (remaining 7) is not. Derived from the per-episode seed/success records in the eval_A result.json files archived with the run outputs.",
   "wave0_paired": {
     "episodes_per_arm": 56,
     "tasks": 7,

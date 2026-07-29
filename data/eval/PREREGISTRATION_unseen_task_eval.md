@@ -237,3 +237,84 @@ training, and all 15 eval-A episodes per arm --- used the identical initial stat
 only policy stochasticity varied. Task 1817 is the single largest contributor to
 RS-SFT's advantage in eval A. This is reported in the paper rather than used to
 drop those tasks.
+
+---
+
+# Amendment 2 — 2026-07-29, written AFTER the result was known
+
+**Read the timing first.** Amendment 1 was written when zero episodes had been
+observed, which is what made it unremarkable. This one is not: the study had
+already run to completion and the primary interval already included zero. An
+amendment written after the outcome is exactly what preregistration exists to
+guard against, so this section has to justify itself rather than just announce
+itself.
+
+## What is being corrected
+
+The motivation section above says, under "Why this study exists":
+
+> With the `% N` wraparound and the double-reset on success, at a realistic
+> `N = 50` the training run blocks 32 of 50 states and **no contiguous window of
+> the required width is free**.
+
+The "double-reset on success" model behind those numbers is not safe. It comes
+from `collection_visited()` in `src/init_state_coverage.py`, which advances the
+reset counter by exactly `1 + 2 * succeeded` per round. That can be wrong in
+**both** directions:
+
+- **Undercount.** After the vector env's autoreset the slot runs a fresh episode
+  and is *still being stepped* — the collection loop continues until every slot
+  is done — so it can terminate again, and each further termination costs two
+  more resets. The episode log cannot show this: `just_done` is masked by
+  `~done`, so a second success is never recorded.
+- **Overcount.** The `+2` assumes an autoreset follows the internal reset, but
+  the vector env only autoresets on a subsequent `venv.step`. A termination on
+  the step that makes every slot done costs one, not two.
+- **Cause.** `terminated = done or is_success`, so success is a sufficient but
+  not the only cause of termination, and the success bit cannot separate them.
+
+Because later rounds start wherever the counter happens to be, an error in one
+round relocates every subsequent index. The reconstructed set is therefore
+neither a subset nor a superset of what was actually visited: **"32 of 50" and
+"no free window of width 15" are an unvalidated estimate, not facts.**
+
+## What replaces it
+
+The weaker statement, which does hold and which is all the decision ever needed:
+
+> Which initial states collection touched is outcome-dependent and cannot be
+> reliably reconstructed from the records we kept. An offset therefore cannot be
+> *shown* to be held out on an already-trained task.
+
+Evaluating tasks that were never trained on is immune to this either way, because
+it does not require knowing the visited set at all.
+
+## What does NOT change
+
+Nothing else. The suite and pool, the seed (20260725), 48 tasks, 3 episodes per
+task, both arms, the exclusion list, `--min_init_states 3`, the primary
+task-clustered bootstrap CI, the secondary exact McNemar test, the exclusion
+rule, and **both decision rules** are untouched. The result is untouched: the
+interval included zero and the study is reported as not establishing a
+generalization advantage.
+
+## Why this is legitimate anyway
+
+The test for a post-result amendment is whether it could have been shaped by the
+result. This one could not:
+
+1. It changes no design element, no analysis, and no reported number.
+2. It moves in the direction *unfavourable* to us — it says our stated reason for
+   running this study was more precise than we could support. A self-serving
+   post-hoc edit does not weaken its own motivation.
+3. The null result is unaffected in either direction. There is no version of this
+   correction that makes the outcome look better.
+
+The correction was not found by re-examining our own result. It came out of an
+adversarial review of a reply we posted on huggingface/lerobot#4152, where the
+same reset model was stated publicly. Correcting it there and leaving it here
+would have been the worse option.
+
+**The body of this preregistration above is unmodified.** Its value depends on
+being readable as it stood before the outcome was known, so the wrong sentence
+stays where it is and this amendment sits below it.
